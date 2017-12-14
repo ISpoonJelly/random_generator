@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+
+
+  generator:
+    build: ./generator
+    image: number_genrator
+    working_dir: /usr/gen
+    command: npm start
+    volumes:
+      - ./generator:/usr/gen
+    environment: 
+      - AMQP_HOST=amqp://rabbitmq
+      - QUEUE_NAME=generated_nums
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
