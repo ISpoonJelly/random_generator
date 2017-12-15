@@ -1,5 +1,5 @@
-var amqp = require("./amqp_handler");
-var number_generator = require("./number_generator");
+var amqp = require("./amqp/amqp_handler");
+var number_generator = require("./util/number_generator");
 
 amqp.init();
 setInterval(() => {

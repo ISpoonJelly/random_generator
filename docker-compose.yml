@@ -1,22 +1,52 @@
 version: '3.2'
 services:
-  rabbitmq:
+  rmq:
     image: rabbitmq:management
     ports:
       - "15672:15672"
 
+  pg:
+    image: postgres
+    environment: 
+      - POSTGRES_USER=average
+      - POSTGRES_PASSWORD=average
+      - POSTGRES_DB=average-dev
 
   pub:
     build: ./pub
-    image: number_genrator
+    image: pub
     working_dir: /usr/gen
     command: npm start
-    volumes:
-      - ./pub:/usr/gen
+    volumes: 
+      - ./pub:/usr/gen/
+      - /usr/gen/node_modules
     environment: 
-      - AMQP_HOST=amqp://rabbitmq
+      - AMQP_HOST=amqp://rmq
       - QUEUE_NAME=generated_nums
     links:
-      - rabbitmq
+      - rmq
+
+  sub:
+    build: ./sub
+    image: sub
+    working_dir: /usr/avg
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes: 
+      - ./sub:/usr/avg
+      - /usr/avg/node_modules
+    environment:
+      - PORT=3000
+      - POSTGRES_HOST=postgresql://average:average@pg:5432/average-dev
+    links:
+      - pg
+      - rmq
+      
+  migration:
+    image: sub
+    command: ./node_modules/.bin/sequelize db:migrate
+    environment:
+      - POSTGRES_HOST=postgresql://average:average@pg:5432/average-dev
     depends_on:
-      - rabbitmq
+      - sub

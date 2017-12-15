@@ -29,6 +29,7 @@ function init() {
         console.log("[AMQP]", "error creating channel with AMQP server");
       }
 
+      console.log("[AMQP", "sucessfully connected to AMQP server.");
       channel = ch;
       channel.assertQueue(config.QUEUE_NAME, { durable: false });
     });

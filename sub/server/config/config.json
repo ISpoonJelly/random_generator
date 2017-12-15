@@ -1,0 +1,21 @@
+{
+  "development": {
+    "use_env_variable": "POSTGRES_HOST"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "average-test",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "average-prod",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}
