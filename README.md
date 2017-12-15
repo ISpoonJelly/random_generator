@@ -1,3 +1,3 @@
 ```
-docker-compose up --scale generator=2
+docker-compose up --scale pub=2
 ```
