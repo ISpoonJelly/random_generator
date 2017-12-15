@@ -6,13 +6,13 @@ services:
       - "15672:15672"
 
 
-  generator:
-    build: ./generator
+  pub:
+    build: ./pub
     image: number_genrator
     working_dir: /usr/gen
     command: npm start
     volumes:
-      - ./generator:/usr/gen
+      - ./pub:/usr/gen
     environment: 
       - AMQP_HOST=amqp://rabbitmq
       - QUEUE_NAME=generated_nums
