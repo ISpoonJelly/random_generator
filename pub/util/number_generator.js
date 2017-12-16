@@ -1,5 +1,5 @@
 module.exports = function () {
-    var genNum = getRandomInteger(1, 1000);
+    var genNum = getRandomInteger(1, 10000);
 
     return {
         time: Date.now(),
