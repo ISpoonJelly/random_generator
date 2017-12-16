@@ -32,7 +32,6 @@ function processMessage(msg) {
   if (msg_queue.length >= MSG_Q_THRESHOLD) {
     message_controller.create(msg_queue, (err, items) => {
       if (err) {
-        console.log("create error!", err);
         msg_queue = msg_queue.concat(items);
       }
     });
@@ -43,7 +42,6 @@ function processMessage(msg) {
 updateChannel = function() {
   channel = amqp.getChannel();
   if (!channel) {
-    console.log("Channel error.");
     setTimeout(updateChannel, 5000);
   }
 };

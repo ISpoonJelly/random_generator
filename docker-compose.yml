@@ -15,10 +15,25 @@ services:
     image: pub
     working_dir: /usr/gen
     command: npm start
-    volumes: 
-      - ./pub:/usr/gen/
+    volumes:
+      - ./pub:/usr/gen
       - /usr/gen/node_modules
     environment: 
+      - VALIDATE_URI=http://validator:6000/validate
+    links:
+      - validator
+
+
+  validator:
+    build: ./mq_validator
+    image: validator
+    working_dir: /usr/validate
+    command: npm start
+    volumes:
+      - ./mq_validator:/usr/validate
+      - /usr/validate/node_modules
+    environment: 
+      - PORT=6000
       - AMQP_HOST=amqp://rmq
       - QUEUE_NAME=generated_nums
     links:
@@ -31,7 +46,7 @@ services:
     command: npm start
     ports:
       - "3000:3000"
-    volumes: 
+    volumes:
       - ./sub:/usr/avg
       - /usr/avg/node_modules
     environment:
