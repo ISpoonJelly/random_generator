@@ -2,12 +2,15 @@ var express = require("express");
 var http = require("http");
 var bodyParser = require("body-parser");
 
+var amqp = require('./amqp/amqp_handler');
+
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 require('./server/routes')(app);
+amqp.init();
 
 if (!module.parent) {
   var server = http.createServer(app);

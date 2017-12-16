@@ -2,8 +2,8 @@ module.exports = function () {
     var genNum = getRandomInteger(1, 1000);
 
     return {
-        timestamp: Date.now(),
-        msg: genNum
+        time: Date.now(),
+        content: genNum
     }
 }
 

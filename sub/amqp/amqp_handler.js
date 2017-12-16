@@ -1,10 +1,9 @@
 var amqp = require("amqplib/callback_api");
-var config = require("./amqp.config");
 
-let MAX_MSGS = 6000;
+var config = require("./amqp.config");
+var worker = require("../workers/average_worker");
 
 var channel;
-var msgQueue = [];
 
 function init() {
   amqp.connect(config.AMQP_HOST + "?heartbeat=60", function(err, conn) {
@@ -32,38 +31,15 @@ function init() {
       console.log("[AMQP]", "sucessfully connected to AMQP server.");
       channel = ch;
       channel.assertQueue(config.QUEUE_NAME, { durable: false });
+
+      worker();
     });
   });
 }
 
-function startPublisher() {
-  if(!channel) {
-    return;
-  }
-  
-  while (true) {
-    var msg = msgQueue.shift();
-    if (!msg) {
-      break;
-    }
-
-    try {
-      channel.sendToQueue(config.QUEUE_NAME, new Buffer(JSON.stringify(msg)));
-    } catch (e) {
-      console.log("caught exception while sending to q", e.message);
-      msgQueue.push(msg);
-    }
-  }
+function getChannel() {
+  return channel;
 }
 
-function sendMessage(msg) {
-  if (msgQueue.length <= MAX_MSGS) {
-    msgQueue.push(msg);
-  }
-  startPublisher();
-}
-
-module.exports = {
-  init,
-  sendMessage
-};
+module.exports.init = init;
+module.exports.getChannel = getChannel;

@@ -1,9 +1,7 @@
 version: '3.2'
 services:
   rmq:
-    image: rabbitmq:management
-    ports:
-      - "15672:15672"
+    image: rabbitmq
 
   pg:
     image: postgres
@@ -39,6 +37,8 @@ services:
     environment:
       - PORT=3000
       - POSTGRES_HOST=postgresql://average:average@pg:5432/average-dev
+      - AMQP_HOST=amqp://rmq
+      - QUEUE_NAME=generated_nums
     links:
       - pg
       - rmq
